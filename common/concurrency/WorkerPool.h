@@ -87,6 +87,10 @@ class WorkerPool {
     void multiplexJob_(Task_ t);
 
 public:
+    inline static constexpr std::chrono::milliseconds BLOCK_INTERVAL() {
+        using namespace std::chrono_literals;
+        return 250ms;
+    }
     WorkerPool(int size, spd::logger &logger);
     WorkerPool(int size, const std::shared_ptr<spd::logger> &logger);
     ~WorkerPool();
