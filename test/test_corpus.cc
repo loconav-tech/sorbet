@@ -269,8 +269,8 @@ TEST_P(ExpectationTest, PerPhaseTest) { // NOLINT
         {
             core::UnfreezeNameTable nameTableAccess(gs);
             core::UnfreezeSymbolTable symbolAccess(gs);
-
-            trees = resolver::Resolver::runConstantResolution(ctx, move(trees));
+            WorkerPool workers(0, gs.tracer());
+            trees = resolver::Resolver::runConstantResolution(ctx, move(trees), workers);
         }
 
         for (auto &tree : trees) {
@@ -284,7 +284,8 @@ TEST_P(ExpectationTest, PerPhaseTest) { // NOLINT
     } else {
         core::UnfreezeNameTable nameTableAccess(gs);     // Resolver::defineAttr
         core::UnfreezeSymbolTable symbolTableAccess(gs); // enters stubs
-        trees = resolver::Resolver::run(ctx, move(trees));
+        WorkerPool workers(0, gs.tracer());
+        trees = resolver::Resolver::run(ctx, move(trees), workers);
         auto newErrors = errorQueue->drainAllErrors();
         errors.insert(errors.end(), make_move_iterator(newErrors.begin()), make_move_iterator(newErrors.end()));
     }
