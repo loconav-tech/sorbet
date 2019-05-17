@@ -408,7 +408,10 @@ private:
             }
         } else {
             ENFORCE(resolved.data(ctx)->isClass());
+            ctx.state.tracer().error("Adding {} to {}", resolved.toString(ctx), job.klass.toString(ctx));
             job.klass.data(ctx)->mixins().emplace_back(resolved);
+
+            ctx.state.tracer().error("Got {}\n\n", job.klass.toString(ctx));
         }
 
         return true;
@@ -592,6 +595,22 @@ public:
         return lhs.endPos() < rhs.endPos();
     }
 
+    static bool locCompareReverseInFile(core::Loc lhs, core::Loc rhs) {
+        if (lhs.file() < rhs.file()) {
+            return true;
+        }
+        if (lhs.file() > rhs.file()) {
+            return false;
+        }
+        if (lhs.beginPos() < rhs.beginPos()) {
+            return true;
+        }
+        if (lhs.beginPos() > rhs.beginPos()) {
+            return false;
+        }
+        return lhs.endPos() < rhs.endPos();
+    }
+
     static vector<ast::ParsedFile> resolveConstants(core::MutableContext ctx, vector<ast::ParsedFile> trees,
                                                     WorkerPool &workers) {
         Timer timeit(ctx.state.errorQueue->logger, "resolver.resolve_constants");
@@ -652,7 +671,7 @@ public:
         fast_sort(todo,
                   [](const auto &lhs, const auto &rhs) -> bool { return locCompare(lhs.out->loc, rhs.out->loc); });
         fast_sort(todoAncestors, [](const auto &lhs, const auto &rhs) -> bool {
-            return locCompare(lhs.ancestor->loc, rhs.ancestor->loc);
+            return locCompareReverseInFile(lhs.ancestor->loc, rhs.ancestor->loc);
         });
         fast_sort(todoClassAliases,
                   [](const auto &lhs, const auto &rhs) -> bool { return locCompare(lhs.rhs->loc, rhs.rhs->loc); });
