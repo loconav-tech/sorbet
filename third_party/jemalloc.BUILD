@@ -36,7 +36,7 @@ JEMALLOC_BUILD_COMMAND = """
     make build_lib_static -j4  && \
     popd && \
     mv $$(dirname $(location autogen.sh))/lib/libjemalloc.a $(location lib/libjemalloc.a) && \
-    mv $$(dirname $(location autogen.sh))/include/jemalloc/jemalloc.h $(location include/jemalloc/jemalloc.h)
+    mv $$(dirname $(location autogen.sh))/include/jemalloc/jemalloc.h $(location jemalloc/jemalloc.h)
 """
 
 genrule(
@@ -58,7 +58,7 @@ genrule(
     ),
     outs = [
         "lib/libjemalloc.a",
-        "include/jemalloc/jemalloc.h",
+        "jemalloc/jemalloc.h",
     ],
     cmd = JEMALLOC_BUILD_COMMAND,
     toolchains = ["@bazel_tools//tools/cpp:current_cc_toolchain"],
@@ -67,7 +67,7 @@ genrule(
 cc_library(
     name = "jemalloc",
     srcs = [":jemalloc_genrule"],
-    hdrs = ["include/jemalloc/jemalloc.h"],
+    hdrs = ["jemalloc/jemalloc.h"],
     linkopts = select({
         "@com_stripe_ruby_typer//tools/config:linux": ["-ldl"],  # side step https://github.com/jemalloc/jemalloc/issues/948
         "//conditions:default": [],
