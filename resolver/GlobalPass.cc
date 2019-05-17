@@ -469,6 +469,7 @@ ParentLinearizationInformation computeLinearization(core::GlobalState &gs, core:
     auto data = ofClass.data(gs);
     ENFORCE(data->isClass());
     if (!data->isClassLinearizationComputed()) {
+        gs.tracer().error("Linearizing {}", ofClass.toString(gs));
         if (data->superClass().exists()) {
             computeLinearization(gs, data->superClass());
         }
@@ -508,6 +509,7 @@ ParentLinearizationInformation computeLinearization(core::GlobalState &gs, core:
         }
         data->mixins() = std::move(newMixins);
         data->setClassLinearizationComputed();
+        gs.tracer().error("Linearized to {}", ofClass.toString(gs));
         if (debug_mode) {
             for (auto oldMixin : currentMixins) {
                 ENFORCE(ofClass.data(gs)->derivesFrom(gs, oldMixin), "{} no longer derives from {}",

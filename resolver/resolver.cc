@@ -671,7 +671,7 @@ public:
         fast_sort(todo,
                   [](const auto &lhs, const auto &rhs) -> bool { return locCompare(lhs.out->loc, rhs.out->loc); });
         fast_sort(todoAncestors, [](const auto &lhs, const auto &rhs) -> bool {
-            return locCompareReverseInFile(lhs.ancestor->loc, rhs.ancestor->loc);
+            return locCompare(lhs.ancestor->loc, rhs.ancestor->loc);
         });
         fast_sort(todoClassAliases,
                   [](const auto &lhs, const auto &rhs) -> bool { return locCompare(lhs.rhs->loc, rhs.rhs->loc); });
