@@ -12,7 +12,7 @@ steps:
       queue: elastic
     plugins:
       - docker#v1.1.1:
-          image: "ubuntu:18.04"
+          image: "darkdimius/sorbet-build-image:latest"
           workdir: /app
           propagate-environment: true
           volumes:
