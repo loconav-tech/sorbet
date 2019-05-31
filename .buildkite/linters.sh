@@ -2,10 +2,7 @@
 
 set -exuo pipefail
 
-if [[ -n "${CLEAN_BUILD-}" ]]; then
-  echo "--- cleanup"
-  rm -rf /usr/local/var/bazelcache/*
-fi
+./tools/setup-linux.sh
 
 echo "--- Pre-setup :bazel:"
 
