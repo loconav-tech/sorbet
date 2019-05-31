@@ -5,9 +5,11 @@ set -euo pipefail
 export JOB_NAME=test-static-sanitized
 source .buildkite/tools/setup-bazel-linux.sh
 
+# shellcheck disable=SC2086
 echo will run with $CONFIG_OPTS
 
 err=0
+# shellcheck disable=SC2086
 ./bazel test //... $CONFIG_OPTS || err=$?
 
 echo "--- uploading test results"
@@ -39,7 +41,7 @@ cat "$annotation_path"
 if grep -q "<details>" "$annotation_path"; then
   echo "--- :buildkite: Creating annotation"
   # shellcheck disable=SC2002
-  cat "$annotation_path" | buildkite-agent annotate --context junit-${platform} --style error --append
+  cat "$annotation_path" | buildkite-agent annotate --context junit-static-sanitized --style error --append
 fi
 
 if [ "$err" -ne 0 ]; then
