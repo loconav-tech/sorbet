@@ -34,16 +34,34 @@ steps:
   - wait: ~
 
 # Build Phase - Build all our artifacts
-  - label: ":mac: build-website.sh"
+  - label: ":linux: build-website.sh"
     command: .buildkite/build-website.sh
     artifact_paths: _out_/**/*
     agents:
-      os: mac
-  - label: ":mac: build-sorbet-runtime.sh"
+      os: linux
+      queue: elastic
+    plugins:
+      - docker#v1.1.1:
+          image: "darkdimius/sorbet-build-image:latest"
+          workdir: /app
+          propagate-environment: true
+          volumes:
+            - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
+
+  - label: ":linux: build-sorbet-runtime.sh"
     command: .buildkite/build-sorbet-runtime.sh
     artifact_paths: _out_/**/*
     agents:
-      os: mac
+      os: linux
+      queue: elastic
+    plugins:
+      - docker#v1.1.1:
+          image: "darkdimius/sorbet-build-image:latest"
+          workdir: /app
+          propagate-environment: true
+          volumes:
+            - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
+
   - label: ":mac: build-static-release.sh"
     command: .buildkite/build-static-release.sh
     artifact_paths: _out_/**/*
@@ -53,13 +71,30 @@ steps:
     command: .buildkite/build-emscripten.sh
     artifact_paths: _out_/**/*
     agents:
-      os: mac
+      os: linux
+      queue: elastic
+    plugins:
+      - docker#v1.1.1:
+          image: "darkdimius/sorbet-build-image:latest"
+          workdir: /app
+          propagate-environment: true
+          volumes:
+            - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
+
   - label: ":linux: build-static-release.sh"
     command: .buildkite/build-static-release.sh
     artifact_paths: _out_/**/*
     agents:
       os: linux
       queue: elastic
+    plugins:
+      - docker#v1.1.1:
+          image: "darkdimius/sorbet-build-image:latest"
+          workdir: /app
+          propagate-environment: true
+          volumes:
+            - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
+
   - wait: ~
 
 # Test Sorbet Gem Phase - Its own phase because it relies on the gem build built
@@ -67,7 +102,16 @@ steps:
   - label: ":mac: test-sorbet-gem.sh"
     command: .buildkite/test-sorbet-gem.sh
     agents:
-      os: mac
+      os: linux
+      queue: elastic
+    plugins:
+      - docker#v1.1.1:
+          image: "darkdimius/sorbet-build-image:latest"
+          workdir: /app
+          propagate-environment: true
+          volumes:
+            - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
+
   - wait: ~
 
 # Deploy Phase - Send the artifacts to the world
@@ -76,6 +120,13 @@ steps:
     agents:
       os: linux
       queue: elastic
+    plugins:
+      - docker#v1.1.1:
+          image: "darkdimius/sorbet-build-image:latest"
+          workdir: /app
+          propagate-environment: true
+          volumes:
+            - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
 
   - wait: ~
 
@@ -93,5 +144,12 @@ steps:
     retry:
       automatic: true
     agents:
-      os: mac
+      os: linux
       queue: elastic
+    plugins:
+      - docker#v1.1.1:
+          image: "darkdimius/sorbet-build-image:latest"
+          workdir: /app
+          propagate-environment: true
+          volumes:
+            - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"

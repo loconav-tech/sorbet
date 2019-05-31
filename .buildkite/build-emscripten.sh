@@ -3,7 +3,7 @@
 set -euo pipefail
 
 export JOB_NAME=emscripten
-source .buildkite/tools/setup-bazel-linux.sh
+source .buildkite/tools/setup-bazel.sh
 
 command -v node
 command -v realpath
