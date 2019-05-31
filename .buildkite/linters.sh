@@ -11,7 +11,7 @@ echo "--- Pre-setup :bazel:"
 
 function finish {
   ./bazel shutdown
-  rm .bazelrc.local
+  rm -rf .bazelrc.local
 }
 trap finish EXIT
 
