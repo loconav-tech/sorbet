@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 if [ "$1" = -t ]; then
     mode="test"
@@ -10,7 +10,7 @@ fi
 
 cd "$(dirname "$0")/../.."
 
-bazel build //tools:clang-format &> /dev/null
+bazel build //tools:clang-format
 
 # shellcheck disable=SC2207
 cxx_src=(
