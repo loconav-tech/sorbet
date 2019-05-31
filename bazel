@@ -191,7 +191,7 @@ mkdir -p $BUILD_DIR
 
   curl -O -L $BAZEL_INSTALLER_PATH
 
-  GENERATED_SHA_256=$(sha256sum $INSTALLER_NAME | awk '{print $1}')
+  GENERATED_SHA_256=$(shasum -a 256 $INSTALLER_NAME | awk '{print $1}')
 
   if [ "$GENERATED_SHA_256" != "$BAZEL_INSTALLER_VERSION_SHA" ]; then
     echo "Sha 256 does not match, expected: $BAZEL_INSTALLER_VERSION_SHA"
