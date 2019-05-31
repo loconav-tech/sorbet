@@ -18,15 +18,18 @@ steps:
           volumes:
             - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
 
-  - label: ":mac: test-static-sanitized.sh"
-    command: .buildkite/test-static-sanitized.sh
-    agents:
-      os: mac
   - label: ":linux: test-static-sanitized.sh"
     command: .buildkite/test-static-sanitized.sh
     agents:
       os: linux
       queue: elastic
+    plugins:
+      - docker#v1.1.1:
+          image: "darkdimius/sorbet-build-image:latest"
+          workdir: /app
+          propagate-environment: true
+          volumes:
+            - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
 
   - wait: ~
 
