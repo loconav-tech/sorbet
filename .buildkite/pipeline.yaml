@@ -31,8 +31,6 @@ steps:
           volumes:
             - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
 
-  - wait: ~
-
 # Build Phase - Build all our artifacts
   - label: ":linux: build-website.sh"
     command: .buildkite/build-website.sh
