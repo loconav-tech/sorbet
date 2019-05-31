@@ -9,6 +9,7 @@ steps:
     command: .buildkite/linters.sh
     agents:
       os: linux
+      queue: elastic
   - label: ":mac: test-static-sanitized.sh"
     command: .buildkite/test-static-sanitized.sh
     agents:
@@ -17,6 +18,8 @@ steps:
     command: .buildkite/test-static-sanitized.sh
     agents:
       os: linux
+      queue: elastic
+
   - wait: ~
 
 # Build Phase - Build all our artifacts
@@ -45,6 +48,7 @@ steps:
     artifact_paths: _out_/**/*
     agents:
       os: linux
+      queue: elastic
   - wait: ~
 
 # Test Sorbet Gem Phase - Its own phase because it relies on the gem build built
@@ -60,6 +64,8 @@ steps:
     command: .buildkite/publish.sh
     agents:
       os: linux
+      queue: elastic
+
   - wait: ~
 
 # Success Phase - Allow the PR to be merged
@@ -77,3 +83,4 @@ steps:
       automatic: true
     agents:
       os: mac
+      queue: elastic
