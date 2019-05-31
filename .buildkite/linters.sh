@@ -2,7 +2,7 @@
 
 set -exuo pipefail
 
-./tools/setup-linux.sh
+.buildkite/tools/setup-linux.sh
 
 echo "--- Pre-setup :bazel:"
 
