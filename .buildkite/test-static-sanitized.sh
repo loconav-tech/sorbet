@@ -5,12 +5,9 @@ set -euo pipefail
 export JOB_NAME=test-static-sanitized
 source .buildkite/tools/setup-bazel-linux.sh
 
-# shellcheck disable=SC2086
-echo will run with $CONFIG_OPTS
 
 err=0
-# shellcheck disable=SC2086
-./bazel test //... $CONFIG_OPTS || err=$?
+./bazel test //... --config=buildfarm-sanitized-linux || err=$?
 
 echo "--- uploading test results"
 
