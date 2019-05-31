@@ -10,6 +10,12 @@ steps:
     agents:
       os: linux
       queue: elastic
+    plugins:
+      - docker#v1.1.1:
+          image: "ubuntu:18.04"
+          workdir: /app
+          propagate-environment: true
+
   - label: ":mac: test-static-sanitized.sh"
     command: .buildkite/test-static-sanitized.sh
     agents:
