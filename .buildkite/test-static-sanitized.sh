@@ -2,48 +2,10 @@
 
 set -euo pipefail
 
-if [[ -n "${CLEAN_BUILD-}" ]]; then
-  echo "--- cleanup"
-  rm -rf /usr/local/var/bazelcache/*
-fi
-
-echo "--- Pre-setup :bazel:"
-
-unameOut="$(uname -s)"
-case "${unameOut}" in
-    Linux*)     platform="linux";;
-    Darwin*)    platform="mac";;
-    *)          exit 1
-esac
-
-if [[ "linux" == "$platform" ]]; then
-  apt-get update -yy
-  apt-get install -yy pkg-config zip g++ zlib1g-dev unzip python ruby
-  CONFIG_OPTS="--config=buildfarm-sanitized-linux"
-elif [[ "mac" == "$platform" ]]; then
-  CONFIG_OPTS="--config=buildfarm-sanitized-mac"
-fi
+export JOB_NAME=test-static-sanitized
+source .buildkite/tools/setup-bazel-linux.sh
 
 echo will run with $CONFIG_OPTS
-
-function finish {
-  ./bazel shutdown
-  rm .bazelrc.local
-}
-trap finish EXIT
-
-rm -f bazel-*
-mkdir -p /usr/local/var/bazelcache/output-bases/test-pr /usr/local/var/bazelcache/build /usr/local/var/bazelcache/repos
-{
-  echo 'common --curses=no --color=yes'
-  echo 'startup --output_base=/usr/local/var/bazelcache/output-bases/test-pr'
-  echo 'build  --disk_cache=/usr/local/var/bazelcache/build --repository_cache=/usr/local/var/bazelcache/repos'
-  echo 'test   --disk_cache=/usr/local/var/bazelcache/build --repository_cache=/usr/local/var/bazelcache/repos'
-} > .bazelrc.local
-
-./bazel version
-
-echo "+++ tests"
 
 err=0
 ./bazel test //... $CONFIG_OPTS || err=$?
