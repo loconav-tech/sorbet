@@ -2,7 +2,7 @@
 
 set -exuo pipefail
 export JOB_NAME=linters
-source .buildkite/tools/setup-bazel-linux.sh
+source .buildkite/tools/setup-bazel.sh
 
 err=0
 globalErr=0

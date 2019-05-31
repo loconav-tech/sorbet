@@ -3,7 +3,7 @@
 set -euo pipefail
 
 export JOB_NAME=test-static-sanitized
-source .buildkite/tools/setup-bazel-linux.sh
+source .buildkite/tools/setup-bazel.sh
 
 
 err=0
