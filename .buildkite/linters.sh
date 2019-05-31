@@ -1,31 +1,9 @@
 #!/bin/bash
 
 set -exuo pipefail
+export JOB_NAME=linters
+source .buildkite/tools/setup-bazel-linux.sh
 
-source .buildkite/tools/setup-linux.sh
-
-echo "--- Pre-setup :bazel:"
-
-function finish {
-  ./bazel shutdown
-  rm -rf .bazelrc.local
-}
-trap finish EXIT
-
-rm -f bazel-*
-mkdir -p /usr/local/var/bazelcache/output-bases/linters /usr/local/var/bazelcache/build /usr/local/var/bazelcache/repos
-{
-  echo 'common --curses=no --color=yes'
-  echo 'startup --output_base=/usr/local/var/bazelcache/output-bases/linters'
-  echo 'build  --disk_cache=/usr/local/var/bazelcache/build --repository_cache=/usr/local/var/bazelcache/repos'
-  echo 'test   --disk_cache=/usr/local/var/bazelcache/build --repository_cache=/usr/local/var/bazelcache/repos'
-} >> .bazelrc.local
-
-./bazel version
-PATH=$PATH:$(pwd)
-export PATH
-
-echo "+++ linters"
 err=0
 globalErr=0
 

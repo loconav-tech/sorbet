@@ -2,46 +2,12 @@
 
 set -euo pipefail
 
-if [[ -n "${CLEAN_BUILD-}" ]]; then
-  echo "--- cleanup"
-  rm -rf /usr/local/var/bazelcache/*
-fi
+export JOB_NAME=linters
+source .buildkite/tools/setup-bazel-linux.sh
 
-echo "--- Pre-setup"
 
-unameOut="$(uname -s)"
-case "${unameOut}" in
-    Linux*)     platform="linux";;
-    Darwin*)    platform="mac";;
-    *)          exit 1
-esac
-
-if [[ "linux" == "$platform" ]]; then
-  echo "only mac builds are supported"
-  exit 1
-elif [[ "mac" == "$platform" ]]; then
-  echo "mac builds are supported"
-  command -v node >/dev/null 2>&1 || brew install node
-  command -v realpath >/dev/null 2>&1 || brew install realpath
-fi
-
-git checkout .bazelrc
-
-function finish {
-  ./bazel shutdown
-}
-trap finish EXIT
-
-rm -f bazel-*
-mkdir -p /usr/local/var/bazelcache/output-bases/emscripten /usr/local/var/bazelcache/build /usr/local/var/bazelcache/repos
-{
-  echo 'common --curses=no --color=yes'
-  echo 'startup --output_base=/usr/local/var/bazelcache/output-bases/emscripten'
-  echo 'build  --disk_cache=/usr/local/var/bazelcache/build --repository_cache=/usr/local/var/bazelcache/repos'
-  echo 'test   --disk_cache=/usr/local/var/bazelcache/build --repository_cache=/usr/local/var/bazelcache/repos'
-} >> .bazelrc
-
-./bazel version
+command -v node
+command -v realpath
 
 echo "--- compilation"
 PATH=$PATH:$(pwd)
