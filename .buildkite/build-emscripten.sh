@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-export JOB_NAME=linters
+export JOB_NAME=emscripten
 source .buildkite/tools/setup-bazel-linux.sh
 
 
