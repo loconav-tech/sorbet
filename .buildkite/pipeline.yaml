@@ -14,6 +14,7 @@ steps:
       - docker#v1.1.1:
           image: "darkdimius/sorbet-build-image:latest"
           workdir: /app
+          init: true
           propagate-environment: true
           volumes:
             - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
@@ -27,6 +28,7 @@ steps:
       - docker#v1.1.1:
           image: "darkdimius/sorbet-build-image:latest"
           workdir: /app
+          init: true
           propagate-environment: true
           volumes:
             - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
@@ -42,6 +44,7 @@ steps:
       - docker#v1.1.1:
           image: "darkdimius/sorbet-build-image:latest"
           workdir: /app
+          init: true
           propagate-environment: true
           volumes:
             - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
@@ -56,6 +59,7 @@ steps:
       - docker#v1.1.1:
           image: "darkdimius/sorbet-build-image:latest"
           workdir: /app
+          init: true
           propagate-environment: true
           volumes:
             - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
@@ -75,6 +79,7 @@ steps:
       - docker#v1.1.1:
           image: "darkdimius/sorbet-build-image:latest"
           workdir: /app
+          init: true
           propagate-environment: true
           volumes:
             - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
@@ -89,6 +94,7 @@ steps:
       - docker#v1.1.1:
           image: "darkdimius/sorbet-build-image:latest"
           workdir: /app
+          init: true
           propagate-environment: true
           volumes:
             - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
@@ -106,6 +112,7 @@ steps:
       - docker#v1.1.1:
           image: "darkdimius/sorbet-build-image:latest"
           workdir: /app
+          init: true
           propagate-environment: true
           volumes:
             - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
@@ -124,6 +131,7 @@ steps:
       - docker#v1.1.1:
           image: "darkdimius/sorbet-build-image:latest"
           workdir: /app
+          init: true
           propagate-environment: true
           volumes:
             - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
@@ -140,6 +148,7 @@ steps:
       - docker#v1.1.1:
           image: "darkdimius/sorbet-build-image:latest"
           workdir: /app
+          init: true
           propagate-environment: true
           volumes:
             - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
