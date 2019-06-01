@@ -12,7 +12,8 @@ command -v realpath
 echo "--- compilation"
 PATH=$PATH:$(pwd)
 export PATH
-tools/scripts/update-sorbet.run.sh
+
+bazel build //emscripten:sorbet-wasm.tar --config=webasm-linux --strip=always
 
 rm -rf _out_
 mkdir -p _out_/webasm
