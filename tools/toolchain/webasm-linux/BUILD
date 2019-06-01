@@ -67,6 +67,7 @@ filegroup(
         "@emscripten_clang_linux//:all",
         "@emscripten_toolchain//:all",
     ],
+    tags = ["manual"],
 )
 
 cc_toolchain(
