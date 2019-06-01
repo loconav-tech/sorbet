@@ -1,6 +1,16 @@
 #!/bin/bash
 set -eo pipefail
 
+export PATH="${PATH}:/usr/local/bin/" # this is where we find node
+EM_CACHE_ARCHIVE="tools/toolchain/webasm-linux/em_cache.tar.gz"
+
+if [ ! -f "$EM_CACHE_ARCHIVE" ]; then
+  echo "can't find stdlib compilation cache";
+fi
+
+command -v node >/dev/null 2>&1 || { echo 'will need node' ; exit 1; }
+command -v realpath > /dev/null 2>&1 || { echo 'will need realpath' ; exit 1; }
+
 EM_CONFIG="LLVM_ROOT='${PWD}/external/emscripten_clang_linux/';"
 EM_CONFIG+="EMSCRIPTEN_NATIVE_OPTIMIZER='${PWD}/external/external/emscripten_clang_linux/optimizer';"
 EM_CONFIG+="BINARYEN_ROOT='${PWD}/external/emscripten_clang_linux/binaryen';"
@@ -33,7 +43,7 @@ OUT_DIR=$(mktemp -dt "emscripten_out-XXXX")
 export OUT_DIR
 EMCC_TEMP_DIR=$(mktemp -dt "emscripten_tmp-XXXX")
 export EMCC_TEMP_DIR
-trap 'rm -rf "$EMCC_TEMP_DIR" "$OUT_DIR" "$EM_CACHE" "$BC_RENAME_PREFIX" "$TMPDIR"' EXIT
+trap 'rm -rf "$EMCC_TEMP_DIR" "$OUT_DIR" "$EM_CACHE" "$BC_RENAME_PREFIX"' EXIT
 # shellcheck disable=SC2089
 # ^^^^ complains that we have literal ' in string, that we _intended_ to have there
 # I didn't find a way to structure it so that it stops complaining.
@@ -69,6 +79,9 @@ for i in "$@"; do
     fi
 done
 
+if [ -n "$tar_name" ]; then
+  tar -xf "$EM_CACHE_ARCHIVE" -C "$EM_CACHE"
+fi
 # Run emscripten to compile and link
 #echo "original_args" "$@"
 #echo "transformed_args" "${args[@]}"
