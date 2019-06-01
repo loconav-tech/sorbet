@@ -93,6 +93,24 @@ steps:
           volumes:
             - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
 
+# Optional Phase - Run optional things
+  - label: ":linux: coverage-static-sanitized.sh"
+    command: .buildkite/coverage-static-sanitized.sh
+    artifact_paths: _out_/**/*
+    retry:
+      automatic: true
+    agents:
+      os: linux
+      queue: elastic
+    plugins:
+      - docker#v1.1.1:
+          image: "darkdimius/sorbet-build-image:latest"
+          workdir: /app
+          propagate-environment: true
+          volumes:
+            - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
+
+
   - wait: ~
 
 # Test Sorbet Gem Phase - Its own phase because it relies on the gem build built
@@ -132,22 +150,3 @@ steps:
   - label: "All tests and builds succeeded"
     command: .buildkite/all-succeeded.sh
   - wait: ~
-
-# Optional Phase - Run optional things
-  - block: "Run optional code coverage"
-  - wait: ~
-  - label: ":mac: coverage-static-sanitized.sh"
-    command: .buildkite/coverage-static-sanitized.sh
-    artifact_paths: _out_/**/*
-    retry:
-      automatic: true
-    agents:
-      os: linux
-      queue: elastic
-    plugins:
-      - docker#v1.1.1:
-          image: "darkdimius/sorbet-build-image:latest"
-          workdir: /app
-          propagate-environment: true
-          volumes:
-            - "/usr/local/var/bazelcache:/usr/local/var/bazelcache"
